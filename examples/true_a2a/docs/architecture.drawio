@@ -1,0 +1,172 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Claude" version="22.1.0" type="device">
+  <diagram name="TRUE A2A Architecture" id="true-a2a-flow">
+    <mxGraphModel dx="1434" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="TRUE A2A - Agents Discover and Call Each Other Directly" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="234" y="20" width="700" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Subtitle -->
+        <mxCell id="subtitle" value="No Central Orchestrator - Each Agent Discovers and Calls the Next Agent in the Chain" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=2;fontColor=#4caf50;" vertex="1" parent="1">
+          <mxGeometry x="234" y="55" width="700" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- User -->
+        <mxCell id="user" value="👤 User" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="240" width="60" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Research Agent -->
+        <mxCell id="research" value="🔍 RESEARCH AGENT&#xa;HTTP Server :10001&#xa;&#xa;📋 AgentCard&#xa;skills: [research, analyze]&#xa;&#xa;✅ Can discover &amp; call&#xa;other agents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=0;verticalAlign=middle;spacingTop=5;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="200" y="200" width="180" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Writer Agent -->
+        <mxCell id="writer" value="✍️ WRITER AGENT&#xa;HTTP Server :10002&#xa;&#xa;📋 AgentCard&#xa;skills: [writing, summarize]&#xa;&#xa;✅ Can discover &amp; call&#xa;other agents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;fontStyle=0;verticalAlign=middle;spacingTop=5;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="480" y="200" width="180" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Security Agent -->
+        <mxCell id="security" value="🛡️ SECURITY AGENT&#xa;HTTP Server :10003&#xa;&#xa;📋 AgentCard&#xa;skills: [security, scanning]&#xa;&#xa;🔚 End of chain&#xa;(returns result)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=0;verticalAlign=middle;spacingTop=5;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="760" y="200" width="180" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow: User to Research -->
+        <mxCell id="arrow1" value="1️⃣ Request" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=2;fontStyle=1;fontSize=11;" edge="1" parent="1" source="user" target="research">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow: Research to Writer (A2A!) -->
+        <mxCell id="arrow2" value="2️⃣ A2A Call&#xa;(discovers via AgentCard)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4caf50;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="1" source="research" target="writer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow: Writer to Security (A2A!) -->
+        <mxCell id="arrow3" value="3️⃣ A2A Call&#xa;(discovers via AgentCard)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4caf50;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="1" source="writer" target="security">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Response arrows (dashed) -->
+        <mxCell id="resp1" value="6️⃣ Final&#xa;Result" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontStyle=2;fontSize=10;dashed=1;" edge="1" parent="1" source="research" target="user">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="290" y="380" />
+              <mxPoint x="90" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="resp2" value="5️⃣ Response" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#d79b00;strokeWidth=2;fontStyle=2;fontSize=10;dashed=1;" edge="1" parent="1" source="writer" target="research">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="570" y="360" />
+              <mxPoint x="290" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="resp3" value="4️⃣ Response" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#b85450;strokeWidth=2;fontStyle=2;fontSize=10;dashed=1;" edge="1" parent="1" source="security" target="writer">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="850" y="360" />
+              <mxPoint x="570" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- AWS Bedrock (used by all agents) -->
+        <mxCell id="bedrock" value="☁️ AWS Bedrock&#xa;Claude Haiku 4.5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="420" y="420" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- GitGuardian API -->
+        <mxCell id="gitguardian" value="🔐 GitGuardian API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#cc0000;fontSize=11;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="760" y="420" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- API arrows -->
+        <mxCell id="api1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9673a6;strokeWidth=1;dashed=1;" edge="1" parent="1" source="research" target="bedrock">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="290" y="400" />
+              <mxPoint x="430" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="api2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9673a6;strokeWidth=1;dashed=1;" edge="1" parent="1" source="writer" target="bedrock">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="api3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9673a6;strokeWidth=1;dashed=1;" edge="1" parent="1" source="security" target="bedrock">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="850" y="400" />
+              <mxPoint x="560" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="api4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#cc0000;strokeWidth=1;dashed=1;" edge="1" parent="1" source="security" target="gitguardian">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Discovery explanation -->
+        <mxCell id="discover-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#4caf50;strokeWidth=2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="500" width="740" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="discover-title" value="🔍 How A2A Discovery Works" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#2e7d32;" vertex="1" parent="1">
+          <mxGeometry x="210" y="505" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="discover-text" value="1. Research Agent needs a writer → Queries AGENT_REGISTRY URLs&#xa;2. Fetches GET /.well-known/agent-card.json from each → Finds Writer Agent has 'writing' skill&#xa;3. Research Agent calls Writer Agent directly via A2A JSON-RPC (POST /)&#xa;4. Writer Agent does the same to find and call Security Agent" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="210" y="525" width="720" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Key difference box -->
+        <mxCell id="key-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1976d2;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="200" y="600" width="740" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="key-title" value="🔑 TRUE A2A Characteristics" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#1565c0;" vertex="1" parent="1">
+          <mxGeometry x="210" y="605" width="250" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="key-text" value="• Agents discover each other via AgentCards at /.well-known/agent-card.json&#xa;• Agents call each other DIRECTLY - no intermediary needed&#xa;• Each agent decides autonomously whether to delegate to another agent&#xa;• Decentralized - no single point of failure&#xa;• True peer-to-peer communication between agents" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="210" y="625" width="720" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="400" width="140" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-title" value="Legend" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="50" y="405" width="60" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend1" value="━━ A2A Call (agent→agent)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#4caf50;" vertex="1" parent="1">
+          <mxGeometry x="50" y="425" width="130" height="16" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend2" value="┄┄ Response / API call" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="50" y="443" width="130" height="16" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend3" value="Numbers = execution order" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="50" y="461" width="130" height="16" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend4" value="✅ Peer-to-peer calls" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#4caf50;" vertex="1" parent="1">
+          <mxGeometry x="50" y="479" width="130" height="16" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
