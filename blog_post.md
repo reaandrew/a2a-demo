@@ -1,4 +1,4 @@
-# Building a Multi-Agent Security Pipeline with Google ADK and GitGuardian
+# Building a Multi-Agent Security Pipeline with Google's A2A Protocol and GitGuardian
 
 **TL;DR**: I built a demo showing how to wire up multiple AI agents using Google's Agent Development Kit (ADK) and the A2A protocol, with GitGuardian scanning content for secrets. The interesting part? There's no hardcoded workflow—the LLM decides which agents to call and when to stop.
 
