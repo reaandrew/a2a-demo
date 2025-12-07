@@ -115,6 +115,26 @@ for turn in range(max_turns):
 
 The host agent's instruction tells it the rules: delegate to one agent per turn, and say "TASK_COMPLETE" when finished. The model figures out the rest.
 
+### A Note on Production Guard Rails
+
+This demo lets the LLM decide whether to call the Security Agent—useful for showcasing A2A's flexibility, but not how you'd build a production system.
+
+In reality, security scanning shouldn't be optional. GitGuardian would be a **static guard rail** that runs on every orchestration, regardless of what the LLM decides. The pattern would look more like:
+
+```python
+# LLM-driven orchestration
+result = await run_llm_orchestration(task)
+
+# Static guard rails - always run, not LLM-dependent
+security_report = await security_agent.scan(result)
+if security_report.has_secrets:
+    raise SecurityException("Content contains exposed secrets")
+```
+
+The power of having agents available to the LLM is real—it enables dynamic workflows that adapt to different tasks. But critical safeguards like secret scanning belong outside the LLM's decision loop. They're non-negotiable steps that execute every time.
+
+For this demo, we've kept everything LLM-driven to illustrate the A2A protocol and show GitGuardian working within a multi-agent system. Just remember: in production, some agents are tools for the LLM to use; others are guard rails that the LLM cannot bypass.
+
 ---
 
 ## The Turn Limit: A Necessary Guard Rail
@@ -238,7 +258,7 @@ The LLM chose to call Research → Writer → Security, then signaled completion
 
 ## Try It Yourself
 
-The complete code is available at: [REPO_LINK_PLACEHOLDER]
+The complete code is available at: https://github.com/reaandrew/a2a-demo
 
 ```bash
 pip install "google-adk[a2a]" uvicorn httpx fastapi
