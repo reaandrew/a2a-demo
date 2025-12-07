@@ -272,6 +272,6 @@ python examples/adk_a2a/run_demo.py
 
 - [Google A2A Protocol Specification](https://github.com/google/a2a)
 - [Google Agent Development Kit (ADK)](https://github.com/google/adk-python)
-- [GitGuardian API Documentation](https://docs.gitguardian.com/api)
+- [GitGuardian API Documentation](https://docs.gitguardian.com/api-docs/home)
 - [LiteLLM - Universal LLM Gateway](https://github.com/BerriAI/litellm)
 
