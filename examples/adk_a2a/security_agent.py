@@ -5,7 +5,7 @@ This agent is built using Google's Agent Development Kit (ADK) and exposed
 as an A2A server using the official to_a2a() function.
 
 Key ADK/A2A concepts demonstrated:
-- Agent with tools (scan_for_secrets tool)
+- Agent with tools (scan_for_secrets tool with GitGuardian API)
 - Automatic AgentCard generation from agent definition
 - Proper A2A server exposure via to_a2a()
 """
@@ -14,7 +14,8 @@ import warnings
 # Suppress experimental warnings from ADK
 warnings.filterwarnings("ignore", message=".*EXPERIMENTAL.*")
 
-import re
+import os
+import requests
 from google.adk.agents import Agent
 from google.adk.models.lite_llm import LiteLlm
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
@@ -22,46 +23,70 @@ from google.adk.a2a.utils.agent_to_a2a import to_a2a
 # Use AWS Bedrock Claude via LiteLLM (EU region model)
 BEDROCK_MODEL = LiteLlm(model="bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0")
 
-
-# Secret detection patterns
-SECRET_PATTERNS = {
-    "AWS Access Key": r"AKIA[0-9A-Z]{16}",
-    "GitHub Token": r"gh[pousr]_[A-Za-z0-9_]{36,}",
-    "JWT Token": r"eyJ[A-Za-z0-9_-]*\.eyJ[A-Za-z0-9_-]*\.[A-Za-z0-9_-]*",
-    "Private Key Header": r"-----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----",
-    "Generic API Key": r"[aA][pP][iI][-_]?[kK][eE][yY][\s:=]+['\"]?[A-Za-z0-9_-]{20,}['\"]?",
-    "Generic Password": r"[pP][aA][sS][sS][wW][oO][rR][dD][\s:=]+['\"]?[^\s'\"]{8,}['\"]?",
-}
+# GitGuardian API configuration
+GITGUARDIAN_API_URL = "https://api.gitguardian.com/v1/scan"
 
 
 def scan_for_secrets(content: str) -> str:
     """
-    Scan content for potential secrets and credentials.
+    Scan content for potential secrets and credentials using GitGuardian API.
 
     Args:
         content: The content to scan for secrets
 
     Returns:
-        A security scan report with findings
+        A security scan report with findings from GitGuardian
     """
-    findings = []
+    import json
 
-    for pattern_name, pattern in SECRET_PATTERNS.items():
-        matches = re.findall(pattern, content)
-        if matches:
-            findings.append({
-                "type": pattern_name,
-                "count": len(matches),
-                "severity": "HIGH" if "Key" in pattern_name or "Token" in pattern_name else "MEDIUM"
-            })
+    api_key = os.environ.get("GITGUARDIAN_API_KEY")
 
-    if findings:
-        report = "⚠️ POTENTIAL SECRETS DETECTED:\n"
-        for finding in findings:
-            report += f"  - {finding['type']}: {finding['count']} occurrence(s) [{finding['severity']}]\n"
-        return report
-    else:
-        return "✅ No obvious secret patterns detected in regex scan."
+    if not api_key:
+        print("", flush=True)
+        print("      ❌ GITGUARDIAN_API_KEY not set", flush=True)
+        return "❌ ERROR: GITGUARDIAN_API_KEY environment variable not set. Cannot perform security scan."
+
+    try:
+        print("", flush=True)
+        print(f"      → GitGuardian API: POST /v1/scan", flush=True)
+        print(f"      → Scanning {len(content)} chars of content...", flush=True)
+
+        response = requests.post(
+            GITGUARDIAN_API_URL,
+            headers={
+                "Authorization": f"Token {api_key}",
+                "Content-Type": "application/json",
+            },
+            json={"document": content, "filename": "content.txt"},
+            timeout=30,
+        )
+
+        print(f"      ← Status: {response.status_code}", flush=True)
+
+        if response.status_code == 200:
+            result = response.json()
+
+            # Print the full API response
+            print(f"      ← Response:", flush=True)
+            print(f"         {json.dumps(result, indent=2).replace(chr(10), chr(10) + '         ')}", flush=True)
+
+            policy_break_count = result.get("policy_break_count", 0)
+
+            # Build report for the agent
+            if policy_break_count > 0:
+                report = f"🚨 SECRETS DETECTED: {policy_break_count} policy break(s) found!\n"
+                for i, breach in enumerate(result.get("policy_breaks", []), 1):
+                    report += f"  Secret #{i}: {breach.get('break_type', 'Unknown')}\n"
+                return report
+            else:
+                return "✅ GitGuardian: No secrets detected!"
+        else:
+            print(f"      ← Error: {response.status_code} - {response.text[:200]}", flush=True)
+            return f"❌ GitGuardian API Error: {response.status_code} - {response.text}"
+
+    except Exception as e:
+        print(f"      ← Exception: {str(e)}", flush=True)
+        return f"❌ GitGuardian API Error: {str(e)}"
 
 
 # Create the Security Agent using ADK

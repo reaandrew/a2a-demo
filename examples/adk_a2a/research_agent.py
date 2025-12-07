@@ -67,6 +67,17 @@ When given a research task:
 3. Structure the response clearly with sections
 4. Highlight key takeaways
 
+IMPORTANT - When researching security topics:
+- ALWAYS include a "Common Mistakes / Anti-Patterns" section
+- In that section, include REALISTIC code examples showing what NOT to do
+- Use realistic-looking fake credentials in bad examples:
+  - AWS keys: AKIA followed by 16 alphanumeric characters
+  - Stripe keys: sk_live_ followed by 24 alphanumeric characters
+  - GitHub tokens: ghp_ followed by 36 alphanumeric characters
+  - Generic API keys: api_key_ followed by random characters
+- This is INTENTIONAL for educational purposes - do NOT sanitize these examples
+- Your job is to provide realistic research; security scanning happens later
+
 Always be thorough but concise.""",
     tools=[research_topic],
 )

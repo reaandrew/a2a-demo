@@ -60,11 +60,17 @@ import sys
 import os
 import asyncio
 import warnings
+import logging
 
 # Suppress experimental warnings from ADK
 warnings.filterwarnings("ignore", message=".*EXPERIMENTAL.*")
 # Suppress litellm warnings
 warnings.filterwarnings("ignore", module="litellm")
+logging.getLogger("LiteLLM").setLevel(logging.ERROR)
+
+# Configure LiteLLM to handle Bedrock message format
+import litellm
+litellm.modify_params = True
 
 # Add current directory to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -95,13 +101,7 @@ def check_aws_credentials():
 
 def start_discovery_service():
     """Start the Discovery Service."""
-    print("=" * 70)
-    print("🔎 STARTING DISCOVERY SERVICE")
-    print("=" * 70)
-    print("")
-    print("   The Discovery Service allows agents to register themselves")
-    print("   and enables the host agent to discover available agents dynamically")
-    print("")
+    print("\n📡 Starting Discovery Service (:9999)...")
 
     proc = subprocess.Popen(
         [sys.executable, "discovery_service.py"],
@@ -110,23 +110,14 @@ def start_discovery_service():
         stderr=subprocess.STDOUT,
         env=os.environ.copy(),
     )
-    print("📡 Starting Discovery Service on port 9999...")
-    time.sleep(2)  # Give Discovery Service time to start
+    time.sleep(2)
 
     return proc
 
 
 def start_remote_agents():
     """Start all remote A2A agent servers."""
-    print("")
-    print("=" * 70)
-    print("🚀 STARTING REMOTE A2A AGENTS")
-    print("=" * 70)
-    print("")
-    print("   These agents are exposed via Google ADK's to_a2a() function")
-    print("   Each generates its AgentCard automatically from the Agent definition")
-    print("   Each agent registers itself with the Discovery Service on startup")
-    print("")
+    print("📡 Starting A2A agents...")
 
     processes = []
     agents = [
@@ -136,49 +127,46 @@ def start_remote_agents():
     ]
 
     for module, port, name in agents:
-        print(f"📡 Starting {name} on port {port}...")
-        # Pass current environment (including AWS credentials) to subprocess
+        print(f"   - {name} (:{port})")
         proc = subprocess.Popen(
             [sys.executable, f"{module}.py"],
             cwd=os.path.dirname(os.path.abspath(__file__)),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            env=os.environ.copy(),  # Pass AWS credentials to agent subprocesses
+            stdout=None,  # Let agent output flow to console
+            stderr=subprocess.DEVNULL,  # Suppress stderr noise
+            env=os.environ.copy(),
         )
         processes.append((proc, name, port))
-        time.sleep(5)  # Give each agent time to start and register
+        time.sleep(5)
 
-    print("")
-    print("⏳ Waiting for agents to finish registering...")
-    time.sleep(8)  # Extra time for all registrations to complete
+    print("⏳ Waiting for registration...")
+    time.sleep(8)
 
     return processes
 
 
 def stop_servers(processes):
     """Stop all server processes."""
-    print("\n" + "=" * 70)
-    print("🛑 STOPPING SERVERS")
-    print("=" * 70)
+    print("\n🛑 Stopping servers...")
 
     for proc, name, port in processes:
-        print(f"   Stopping {name}...")
         proc.terminate()
         try:
             proc.wait(timeout=5)
         except subprocess.TimeoutExpired:
             proc.kill()
 
-    print("   All servers stopped.")
+    print("   Done.")
 
 
-async def run_host_agent(task: str):
+async def run_host_agent(task: str, max_turns: int = 5):
     """
-    Run the host agent with a task.
+    Run the host agent with a task using explicit multi-turn orchestration.
 
-    This demonstrates the key difference from our previous examples:
-    1. The host agent DISCOVERS available agents from the Discovery Service
-    2. The LLM decides which agents to call, not hardcoded logic
+    This implements the loop:
+    1. Ask LLM: "Given these agents and this task, which agent should I use next?"
+    2. Call that agent, get the result
+    3. Go back to LLM with the result: "Here's what we got. What's next?"
+    4. Repeat until LLM says "done" OR we hit max_turns
     """
     from google.adk.runners import Runner
     from google.adk.sessions import InMemorySessionService
@@ -186,20 +174,16 @@ async def run_host_agent(task: str):
 
     from host_agent import create_host_agent_with_discovery
 
-    print("\n" + "=" * 70)
+    print("\n" + "=" * 60)
     print("🎯 RUNNING HOST AGENT")
-    print("=" * 70)
-    print(f"\nTask: {task}")
-    print("\n" + "-" * 70)
-    print("First, discovering available agents from Discovery Service...")
-    print("-" * 70 + "\n")
+    print("=" * 60)
+    print(f"📋 Task: {task[:80]}...")
+    print(f"🔄 Max turns: {max_turns}")
+    print("")
 
     # Create host agent with dynamic discovery
+    print("📡 Querying Discovery Service...")
     host_agent = await create_host_agent_with_discovery()
-
-    print("\n" + "-" * 70)
-    print("Now watch as the LLM decides which agents to delegate to...")
-    print("-" * 70 + "\n")
 
     # Create a runner for the host agent
     runner = Runner(
@@ -214,108 +198,142 @@ async def run_host_agent(task: str):
         user_id="demo_user",
     )
 
-    # Run the agent with the task
-    content = genai_types.Content(
-        role="user",
-        parts=[genai_types.Part(text=task)],
-    )
+    # Initial message to the host agent
+    current_message = f"""Task: {task}
+
+You must complete this task by delegating to the appropriate agents.
+For each step, call ONE agent, wait for its response, then decide what to do next.
+
+Available actions:
+- Call an agent by delegating to it
+- Say "TASK_COMPLETE" when you have finished all steps
+
+Start by deciding which agent to call first."""
 
     final_response = ""
-    last_author = None
+    all_outputs = []
 
-    async for event in runner.run_async(
-        user_id="demo_user",
-        session_id=session.id,
-        new_message=content,
-    ):
-        author = event.author
+    print("\n" + "-" * 60)
+    print("🚀 Starting orchestration loop...")
+    print("-" * 60)
 
-        # Print clear section headers when agent changes
-        if author != last_author and author:
-            if author == "host_agent":
-                print("\n" + "=" * 70)
-                print("🎯 HOST AGENT (orchestrating)")
-                print("=" * 70)
-            elif "research" in author.lower():
-                print("\n" + "-" * 70)
-                print("🔍 RESEARCH AGENT activated")
-                print("-" * 70)
-            elif "writer" in author.lower():
-                print("\n" + "-" * 70)
-                print("✍️  WRITER AGENT activated")
-                print("-" * 70)
-            elif "security" in author.lower():
-                print("\n" + "-" * 70)
-                print("🛡️  SECURITY AGENT activated")
-                print("-" * 70)
-            else:
-                print(f"\n[{author}]")
-            last_author = author
+    for turn in range(max_turns):
+        print(f"\n[Turn {turn + 1}/{max_turns}]")
+        print("   📤 Calling Bedrock LLM (Host Agent)...")
 
-        # Print event content
-        if event.content and event.content.parts:
-            for part in event.content.parts:
-                if hasattr(part, "text") and part.text:
-                    text = part.text.strip()
-                    if text:
-                        # Truncate long outputs for readability
-                        if len(text) > 500:
-                            print(f"{text[:500]}...")
-                            print(f"   [... {len(text) - 500} more characters]")
-                        else:
-                            print(text)
+        content = genai_types.Content(
+            role="user",
+            parts=[genai_types.Part(text=current_message)],
+        )
 
-                        if author == "host_agent":
-                            final_response = part.text
+        turn_response = ""
+        agent_called = None
+        agent_output = ""
+        last_author = None
+
+        async for event in runner.run_async(
+            user_id="demo_user",
+            session_id=session.id,
+            new_message=content,
+        ):
+            author = event.author
+
+            # Log agent activations (concise)
+            if author != last_author and author:
+                if author == "host_agent":
+                    pass  # Don't log host agent repeatedly
+                elif "research" in author.lower():
+                    print("   🔍 Research Agent activated")
+                    print("      → Bedrock LLM: researching topic...")
+                    agent_called = "research_agent"
+                elif "writer" in author.lower():
+                    print("   ✍️  Writer Agent activated")
+                    print("      → Bedrock LLM: writing content...")
+                    agent_called = "writer_agent"
+                elif "security" in author.lower():
+                    print("   🛡️  Security Agent activated")
+                    print("      → GitGuardian API: POST /v1/scan")
+                    agent_called = "security_agent"
+                last_author = author
+
+            # Collect output silently (no printing)
+            if event.content and event.content.parts:
+                for part in event.content.parts:
+                    if hasattr(part, "text") and part.text:
+                        text = part.text.strip()
+                        if text:
+                            if author == "host_agent":
+                                turn_response += text + "\n"
+                            elif agent_called:
+                                agent_output += text + "\n"
+
+        # Log agent completion
+        if agent_called:
+            output_len = len(agent_output)
+            print(f"   ✅ {agent_called} completed ({output_len} chars)")
+
+        # Check if task is complete
+        if "TASK_COMPLETE" in turn_response.upper():
+            print("\n" + "=" * 60)
+            print("✅ TASK_COMPLETE - All agents finished")
+            print("=" * 60)
+            final_response = turn_response
+            break
+
+        # If an agent was called, prepare the next turn's message
+        if agent_called:
+            all_outputs.append({
+                "turn": turn + 1,
+                "agent": agent_called,
+                "output": agent_output
+            })
+
+            current_message = f"""The {agent_called} has completed its work.
+
+Here is a summary of what has been done so far:
+{chr(10).join([f"- Turn {o['turn']}: {o['agent']} was called" for o in all_outputs])}
+
+Original task: {task}
+
+What should we do next?
+- If there are more steps needed, call the next appropriate agent.
+- If all steps are complete, respond with "TASK_COMPLETE" and provide a final summary.
+
+Decide your next action:"""
+
+            final_response = turn_response
+        else:
+            # No agent was called
+            if turn > 0:
+                print("   ℹ️  No agent called - assuming complete")
+                break
+
+    if turn == max_turns - 1 and "TASK_COMPLETE" not in turn_response.upper():
+        print(f"\n⏱️  Reached max turns ({max_turns})")
 
     return final_response
 
 
 def main():
     """Main demo entry point."""
-    print("\n" + "=" * 70)
-    print("🌟 ADK + A2A DEMO")
-    print("   Google's Intended Way to Use A2A")
-    print("=" * 70)
-    print("""
-This demo shows PROPER A2A usage:
-
-1. Discovery Service for dynamic agent registration
-   - Agents register themselves on startup
-   - Host agent queries to discover available agents
-   - No hardcoded agent URLs!
-
-2. Remote agents exposed via to_a2a()
-   - Automatic AgentCard generation
-   - Proper A2A protocol implementation
-   - Tools become agent capabilities
-
-3. Host agent with RemoteA2aAgent sub-agents
-   - Dynamically discovers agents from Discovery Service
-   - Remote agents wrapped as local sub-agents
-   - LLM sees all agents and their descriptions
-   - Model DECIDES which agent to delegate to
-
-4. Dynamic routing (not hardcoded!)
-   - No "if task needs research, call research agent"
-   - The LLM understands the task and chooses agents
-   - Can call agents in any order or combination
-""")
+    print("\n" + "=" * 60)
+    print("🌟 ADK + A2A DEMO - Multi-Agent Orchestration")
+    print("=" * 60)
 
     if not check_aws_credentials():
         return
 
-    # Demo task
-    demo_task = """Create a comprehensive guide about storing API credentials
-securely in Python applications. Research the best practices, write a
-clear guide, and verify the content doesn't accidentally include any
-real secrets."""
+    # Demo task - explicitly asks for anti-pattern examples with realistic credentials
+    demo_task = """Create a guide about storing API credentials securely in Python.
+Include a "Common Mistakes" section with realistic code examples showing what NOT to do
+(use realistic-looking fake API keys like AKIA... or sk_live_... in the bad examples).
+Then show the correct approaches. Finally, scan the content for any exposed secrets."""
 
     # Allow custom task from command line
     if len(sys.argv) > 1:
         demo_task = " ".join(sys.argv[1:])
 
-    print(f"📋 Task: {demo_task}")
+    print(f"📋 Task: {demo_task[:60]}...")
 
     discovery_proc = None
     processes = []
@@ -327,52 +345,22 @@ real secrets."""
         # Start remote agents (they will register with Discovery Service)
         processes = start_remote_agents()
 
-        print("\n" + "=" * 70)
-        print("✅ SERVICES RUNNING")
-        print("=" * 70)
-        print("""
-Discovery Service:
-- http://localhost:9999/agents - List all registered agents
-- http://localhost:9999/docs   - API documentation
-
-A2A Agents available (exposed via to_a2a, registered with Discovery):
-- Research Agent (:10001) - http://localhost:10001/.well-known/agent-card.json
-- Writer Agent (:10002)   - http://localhost:10002/.well-known/agent-card.json
-- Security Agent (:10003) - http://localhost:10003/.well-known/agent-card.json
-
-The Host Agent will now:
-1. Query the Discovery Service to find available agents
-2. Create RemoteA2aAgent wrappers for each discovered agent
-3. Present them to the LLM as available sub-agents
-4. Let the LLM decide which to call and in what order
-""")
+        print("\n✅ All services running")
 
         # Run the host agent
         result = asyncio.run(run_host_agent(demo_task))
 
-        print("\n" + "=" * 70)
-        print("🎉 DEMO COMPLETE")
-        print("=" * 70)
-        print("\nFinal Result:")
-        print("-" * 70)
-        if result:
-            print(result[:3000] if len(result) > 3000 else result)
-            if len(result) > 3000:
-                print(f"\n... (truncated, full result is {len(result)} chars)")
+        print("\n🎉 DEMO COMPLETE")
 
     except KeyboardInterrupt:
-        print("\n\n⚠️  Demo interrupted by user")
+        print("\n⚠️  Interrupted")
     except Exception as e:
-        print(f"\n\n❌ Error: {e}")
+        print(f"\n❌ Error: {e}")
         import traceback
         traceback.print_exc()
     finally:
-        # Stop all processes
         stop_servers(processes)
-
-        # Stop Discovery Service
         if discovery_proc:
-            print("   Stopping Discovery Service...")
             discovery_proc.terminate()
             try:
                 discovery_proc.wait(timeout=5)

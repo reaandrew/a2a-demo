@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Mozilla/5.0" version="21.0.0" etag="2" type="device">
+  <diagram name="Sequence" id="sequence-diagram">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Participants -->
+        <mxCell id="p1" value="Discovery&#xa;Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p2" value="Host Agent&#xa;(Orchestrator)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="160" y="40" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p7" value="Bedrock LLM&#xa;(Claude)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="300" y="40" width="90" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p3" value="Research&#xa;Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="430" y="40" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p4" value="Writer&#xa;Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="550" y="40" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p5" value="Security&#xa;Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="670" y="40" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p6" value="GitGuardian&#xa;API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="790" y="40" width="80" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Lifelines -->
+        <mxCell id="l1" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="80" y="90" as="sourcePoint" />
+            <mxPoint x="80" y="900" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="90" as="sourcePoint" />
+            <mxPoint x="210" y="900" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l7" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="90" as="sourcePoint" />
+            <mxPoint x="345" y="900" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l3" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470" y="90" as="sourcePoint" />
+            <mxPoint x="470" y="900" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l4" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="590" y="90" as="sourcePoint" />
+            <mxPoint x="590" y="900" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l5" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="710" y="90" as="sourcePoint" />
+            <mxPoint x="710" y="900" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l6" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="90" as="sourcePoint" />
+            <mxPoint x="830" y="900" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Phase 1: Startup -->
+        <mxCell id="phase1" value="Phase 1: Startup" style="text;html=1;strokeColor=none;fillColor=#e1d5e7;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="110" width="830" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="reg1" value="register()" style="endArrow=classic;html=1;strokeColor=#82b366;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470" y="150" as="sourcePoint" />
+            <mxPoint x="80" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="reg2" value="register()" style="endArrow=classic;html=1;strokeColor=#82b366;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="590" y="175" as="sourcePoint" />
+            <mxPoint x="80" y="175" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="reg3" value="register()" style="endArrow=classic;html=1;strokeColor=#82b366;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="710" y="200" as="sourcePoint" />
+            <mxPoint x="80" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Phase 2: Discovery -->
+        <mxCell id="phase2" value="Phase 2: Discovery" style="text;html=1;strokeColor=none;fillColor=#dae8fc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="230" width="830" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="disc1" value="GET /agents" style="endArrow=classic;html=1;strokeColor=#6c8ebf;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="270" as="sourcePoint" />
+            <mxPoint x="80" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="disc2" value="[research, writer, security]" style="endArrow=classic;html=1;strokeColor=#6c8ebf;dashed=1;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="80" y="295" as="sourcePoint" />
+            <mxPoint x="210" y="295" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Phase 3: Orchestration -->
+        <mxCell id="phase3" value="Phase 3: Orchestration (LLM-Driven)" style="text;html=1;strokeColor=none;fillColor=#fff2cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="325" width="830" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Turn 1: LLM decides to call Research -->
+        <mxCell id="turn1" value="Turn 1" style="text;html=1;strokeColor=#d6b656;fillColor=#fff2cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="360" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="t1llm1" value="task + available agents" style="endArrow=classic;html=1;strokeColor=#d79b00;strokeWidth=2;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="395" as="sourcePoint" />
+            <mxPoint x="345" y="395" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t1llm2" value="&quot;call research_agent&quot;" style="endArrow=classic;html=1;strokeColor=#d79b00;dashed=1;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="420" as="sourcePoint" />
+            <mxPoint x="210" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t1a" value="A2A POST (research task)" style="endArrow=classic;html=1;strokeColor=#82b366;strokeWidth=2;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="450" as="sourcePoint" />
+            <mxPoint x="470" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t1ra1" value="generate research" style="endArrow=classic;html=1;strokeColor=#d79b00;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470" y="475" as="sourcePoint" />
+            <mxPoint x="345" y="475" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t1ra2" value="research content" style="endArrow=classic;html=1;strokeColor=#d79b00;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="495" as="sourcePoint" />
+            <mxPoint x="470" y="495" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t1b" value="research findings" style="endArrow=classic;html=1;strokeColor=#82b366;dashed=1;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470" y="520" as="sourcePoint" />
+            <mxPoint x="210" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Turn 2: LLM decides to call Writer -->
+        <mxCell id="turn2" value="Turn 2" style="text;html=1;strokeColor=#d6b656;fillColor=#fff2cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="545" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="t2llm1" value="research result + &quot;what next?&quot;" style="endArrow=classic;html=1;strokeColor=#d79b00;strokeWidth=2;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="580" as="sourcePoint" />
+            <mxPoint x="345" y="580" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t2llm2" value="&quot;call writer_agent&quot;" style="endArrow=classic;html=1;strokeColor=#d79b00;dashed=1;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="605" as="sourcePoint" />
+            <mxPoint x="210" y="605" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t2a" value="A2A POST (write content)" style="endArrow=classic;html=1;strokeColor=#82b366;strokeWidth=2;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="635" as="sourcePoint" />
+            <mxPoint x="590" y="635" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t2wa1" value="generate content" style="endArrow=classic;html=1;strokeColor=#d79b00;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="590" y="660" as="sourcePoint" />
+            <mxPoint x="345" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t2wa2" value="polished content" style="endArrow=classic;html=1;strokeColor=#d79b00;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="680" as="sourcePoint" />
+            <mxPoint x="590" y="680" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t2b" value="polished content" style="endArrow=classic;html=1;strokeColor=#82b366;dashed=1;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="590" y="705" as="sourcePoint" />
+            <mxPoint x="210" y="705" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Turn 3: LLM decides to call Security -->
+        <mxCell id="turn3" value="Turn 3" style="text;html=1;strokeColor=#d6b656;fillColor=#fff2cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="730" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="t3llm1" value="content result + &quot;what next?&quot;" style="endArrow=classic;html=1;strokeColor=#d79b00;strokeWidth=2;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="765" as="sourcePoint" />
+            <mxPoint x="345" y="765" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t3llm2" value="&quot;call security_agent&quot;" style="endArrow=classic;html=1;strokeColor=#d79b00;dashed=1;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="790" as="sourcePoint" />
+            <mxPoint x="210" y="790" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t3a" value="A2A POST (scan for secrets)" style="endArrow=classic;html=1;strokeColor=#82b366;strokeWidth=2;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="820" as="sourcePoint" />
+            <mxPoint x="710" y="820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t3b" value="POST /v1/scan" style="endArrow=classic;html=1;strokeColor=#b85450;strokeWidth=2;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="710" y="845" as="sourcePoint" />
+            <mxPoint x="830" y="845" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t3c" value="{policy_break_count: 6}" style="endArrow=classic;html=1;strokeColor=#b85450;dashed=1;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="865" as="sourcePoint" />
+            <mxPoint x="710" y="865" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t3d" value="security report" style="endArrow=classic;html=1;strokeColor=#82b366;dashed=1;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="710" y="890" as="sourcePoint" />
+            <mxPoint x="210" y="890" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Turn 4: LLM decides complete -->
+        <mxCell id="turn4" value="Turn 4" style="text;html=1;strokeColor=#d6b656;fillColor=#fff2cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="915" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="t4llm1" value="security result + &quot;what next?&quot;" style="endArrow=classic;html=1;strokeColor=#d79b00;strokeWidth=2;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="950" as="sourcePoint" />
+            <mxPoint x="345" y="950" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t4llm2" value="&quot;TASK_COMPLETE&quot;" style="endArrow=classic;html=1;strokeColor=#d79b00;dashed=1;fontSize=10;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="975" as="sourcePoint" />
+            <mxPoint x="210" y="975" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="complete" value="TASK_COMPLETE" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="990" width="120" height="25" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

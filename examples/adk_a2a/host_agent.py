@@ -84,16 +84,22 @@ You have access to the following agents (dynamically discovered):
 
 {agent_descriptions}
 
-Your job is to:
-1. Understand what the user wants
-2. Break down the task into steps
-3. Delegate to the appropriate agent(s) based on their descriptions
-4. Combine their outputs into a final result
+IMPORTANT RULES:
+1. You MUST delegate work to agents - do NOT try to do the work yourself
+2. Call exactly ONE agent per turn
+3. After each agent completes, you will be asked what to do next
+4. When all steps are complete, say "TASK_COMPLETE" and summarize the results
 
-Choose which agents to use based on the task requirements. Not all tasks need all agents.
-The agents available may change over time as new agents are registered or removed.
+For comprehensive content creation tasks, the typical workflow is:
+1. First, delegate to research_agent to gather information
+2. Then, delegate to writer_agent to create polished content from the research
+3. Finally, delegate to security_agent to verify no secrets are exposed
 
-Always explain what you're doing and why you're delegating to each agent.""",
+When delegating:
+- Briefly explain why you're calling that agent
+- Then call the agent with the appropriate task
+
+Remember: You are an ORCHESTRATOR. Your job is to coordinate agents, not to do the work yourself.""",
         sub_agents=sub_agents,
     )
 

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Mozilla/5.0" version="21.0.0" etag="3" type="device">
+  <diagram name="Flow" id="flow-diagram">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Data Flow Through Multi-Agent Pipeline" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="225" y="20" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Start: Task Input -->
+        <mxCell id="start" value="📋 Task Input" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="start-desc" value="&quot;Create a guide about&#xa;storing API credentials...&quot;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="25" y="185" width="150" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 1 -->
+        <mxCell id="arrow1" value="" style="endArrow=classic;html=1;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="160" y="150" as="sourcePoint" />
+            <mxPoint x="210" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Research Agent -->
+        <mxCell id="research" value="🔍 Research Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="210" y="110" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="research-out" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="210" y="165" width="140" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="research-text" value="Raw research&#xa;17,244 chars" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="220" y="170" width="120" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 2 -->
+        <mxCell id="arrow2" value="" style="endArrow=classic;html=1;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="350" y="150" as="sourcePoint" />
+            <mxPoint x="400" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Writer Agent -->
+        <mxCell id="writer" value="✍️ Writer Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="400" y="110" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="writer-out" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="165" width="140" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="writer-text" value="Polished guide with&#xa;code examples" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="410" y="170" width="120" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 3 -->
+        <mxCell id="arrow3" value="" style="endArrow=classic;html=1;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="540" y="150" as="sourcePoint" />
+            <mxPoint x="590" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Security Agent -->
+        <mxCell id="security" value="🛡️ Security Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="590" y="110" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- GitGuardian Box -->
+        <mxCell id="gg-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="590" y="165" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="gg-label" value="GitGuardian API" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="168" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gg-result" value="🚨 6 secrets detected!&#xa;&#xa;• Stripe Keys (4)&#xa;• AWS Keys (2)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="600" y="190" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow to completion -->
+        <mxCell id="arrow4" value="" style="endArrow=classic;html=1;strokeColor=#666666;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="660" y="260" as="sourcePoint" />
+            <mxPoint x="660" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Host Agent Decision -->
+        <mxCell id="host-decision" value="🎯 Host Agent" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="590" y="310" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- TASK_COMPLETE -->
+        <mxCell id="complete" value="✅ TASK_COMPLETE" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="590" y="420" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow to complete -->
+        <mxCell id="arrow5" value="" style="endArrow=classic;html=1;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="660" y="390" as="sourcePoint" />
+            <mxPoint x="660" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Turn indicators -->
+        <mxCell id="turn1-label" value="Turn 1" style="text;html=1;strokeColor=none;fillColor=#fff2cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="255" y="85" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="turn2-label" value="Turn 2" style="text;html=1;strokeColor=none;fillColor=#fff2cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="445" y="85" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="turn3-label" value="Turn 3" style="text;html=1;strokeColor=none;fillColor=#fff2cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="635" y="85" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="turn4-label" value="Turn 4" style="text;html=1;strokeColor=none;fillColor=#fff2cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="740" y="340" width="50" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Key insight callout -->
+        <mxCell id="callout" value="LLM decides the order&#xa;and when to stop" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;fontStyle=2;position2=0.5;size=20;position=0.25;" vertex="1" parent="1">
+          <mxGeometry x="40" y="320" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Dashed line connecting turns -->
+        <mxCell id="orchestration-line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#d6b656;strokeWidth=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="370" as="sourcePoint" />
+            <mxPoint x="590" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
