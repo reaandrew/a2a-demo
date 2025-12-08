@@ -179,6 +179,10 @@ def scan_for_secrets(content: str) -> str:
 
 To make the demo more interesting, the Research and Writer agents are instructed to include realistic-looking fake credentials in their "anti-pattern" examples. This triggers GitGuardian's detection, demonstrating the security pipeline in action.
 
+### Why GitGuardian?
+
+We chose to work with GitGuardian as we have found their detection engine to produce the cleanest output, with the lowest false positive rates, which is critical when dealing with agents. We started with the simplest use of their API, just scanning, but there are many ways we can evolve this integration based on the needs of the wider security and DevSecOps teams. For example, we could see the agents accessing severity scoring when evaluating secrets or automating certain remediation workflows directly from their platform.
+
 ![Flow diagram showing content flowing through agents with GitGuardian scan](diagrams/flow_diagram.drawio.png)
 
 ---
@@ -274,4 +278,5 @@ python examples/adk_a2a/run_demo.py
 - [Google Agent Development Kit (ADK)](https://github.com/google/adk-python)
 - [GitGuardian API Documentation](https://docs.gitguardian.com/api-docs/home)
 - [LiteLLM - Universal LLM Gateway](https://github.com/BerriAI/litellm)
+- [Slack Engineering: Streamlining Security Investigations with Agents](https://slack.engineering/streamlining-security-investigations-with-agents/) - A related approach to runtime security for credentials with AI agents
 
