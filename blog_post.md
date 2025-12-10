@@ -21,7 +21,9 @@ The twist? None of these agents know about each other. An orchestrator discovers
 
 ## A2A: The Protocol Connecting Agents
 
-Google's [Agent-to-Agent (A2A) protocol](https://github.com/google/a2a) is an open standard for agent interoperability. Each agent exposes an `AgentCard`—a JSON document describing its capabilities—at a well-known endpoint:
+The [Agent-to-Agent (A2A) protocol](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability) is Google's new open standard that enables AI agents, regardless of vendor, framework, or platform, to securely communicate, share information, and coordinate tasks across the enterprise. Built with contributions from more than 50 major technology partners, A2A creates a unified way for agents to collaborate across siloed systems, automate complex workflows, and deliver higher levels of efficiency and autonomy. Designed to complement Anthropic's Model Context Protocol (MCP), it provides a universal interoperability layer so businesses can mix and match agents from different providers and manage them consistently across applications and cloud environments, unlocking the full potential of agentic AI.
+
+Each agent exposes an `AgentCard`, a JSON document describing its capabilities, at a well-known endpoint:
 
 ```
 http://localhost:10001/.well-known/agent-card.json
