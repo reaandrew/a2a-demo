@@ -68,6 +68,11 @@ async def create_host_agent_with_discovery() -> Agent:
         )
         sub_agents.append(remote_agent)
 
+    # Build dynamic instruction listing discovered agents
+    agent_descriptions = "\n".join([
+        f"- {a.name}: {a.description}" for a in discovered_agents
+    ])
+
     # The LLM sees these as available tools
     host = Agent(
         name="host_agent",
